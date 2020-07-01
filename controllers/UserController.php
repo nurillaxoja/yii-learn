@@ -24,14 +24,16 @@ class UserController extends Controller
             'verbs' => [
                 'access' => [
                     'class' => AccessControl::className(),
+                    'only' => ['logout'],
                     'rules' => [
                         [
+                            'actions'=>['log out'],
                             'allow' => true,
                             'roles' => ['@'],
                         ],
                     ],
                 ],
-    
+
 
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -76,15 +78,30 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $model = new User();
+         $model = new User();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            if ($model->new_password) {
+                $model->password = Yii::$app->security->generatePasswordHash($model->new_password);
+            }else{
+                $model->validate();
+            }
+
+
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
+
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+            ]);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
 
     /**

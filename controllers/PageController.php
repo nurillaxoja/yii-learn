@@ -23,8 +23,10 @@ class PageController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
+                'only' => ['logout'],
                 'rules' => [
                     [
+                        'actions'=>['log out'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],

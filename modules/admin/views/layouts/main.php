@@ -51,7 +51,7 @@ $url = Yii::$app->homeUrl.'backend/';
             <!--logo start-->
             <a href="<?= Yii::$app->homeUrl ?>" class="logo"><b>Blog UZ</b></a>
             <!--logo end-->
-            
+
             <div class="top-menu">
             	<ul class="nav pull-right top-menu">
                     <li><a class="logout" href="login.html">Logout</a></li>
@@ -59,7 +59,7 @@ $url = Yii::$app->homeUrl.'backend/';
             </div>
         </header>
       <!--header end-->
-      
+
       <!-- **********************************************************************************************************************************************************
       MAIN SIDEBAR MENU
       *********************************************************************************************************************************************************** -->
@@ -68,11 +68,11 @@ $url = Yii::$app->homeUrl.'backend/';
           <div id="sidebar"  class="nav-collapse ">
               <!-- sidebar menu start-->
               <ul class="sidebar-menu" id="nav-accordion">
-              
+
               	  <p class="centered"><a href="profile.html"><img src="<?=$url ?>assets/img/ui-sam.jpg" class="img-circle" width="60"></a></p>
-                    <h5 class="centered">Marcel Newman</h5>
+                    <h5 class="centered"><?= Yii::$app->user->identity->full_name ?></h5>
                     <?php $controller = Yii::$app->controller->id; ?>
-              	
+
                   <li class="">
                       <a class="<?=($controller == 'default')?"active": ''?>" href="<?= Url::to(['default/index']) ?>">
                           <i class="fa fa-dashboard"></i>
@@ -93,7 +93,7 @@ $url = Yii::$app->homeUrl.'backend/';
                           <span>Categories</span>
                       </a>
                   </li>
-                  
+
                   <li class="">
                       <a class="<?=($controller == 'tag')?"active": ''?>" href="<?= Url::to(['tag/index']) ?>">
                           <i class="fa fa-tag"></i>
@@ -126,7 +126,7 @@ $url = Yii::$app->homeUrl.'backend/';
           </div>
       </aside>
       <!--sidebar end-->
-      
+
       <!-- **********************************************************************************************************************************************************
       MAIN CONTENT
       *********************************************************************************************************************************************************** -->
@@ -135,10 +135,10 @@ $url = Yii::$app->homeUrl.'backend/';
           <section class="wrapper">
 
           <?= $content
-          
-          
+
+
           ?>
-            
+
           </section>
       </section>
 

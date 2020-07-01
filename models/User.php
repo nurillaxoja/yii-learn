@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "user".
@@ -17,7 +18,7 @@ use Yii;
  *
  * @property Post[] $posts
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
     /**
      * {@inheritdoc}
@@ -26,6 +27,11 @@ class User extends \yii\db\ActiveRecord
     {
         return 'user';
     }
+    public $current_password;
+    public $new_password;
+    public $confirm_password;
+    public $authKey;
+    public $accesToken;
 
     /**
      * {@inheritdoc}
@@ -36,7 +42,8 @@ class User extends \yii\db\ActiveRecord
             [['username', 'password', 'full_name', 'status', 'role'], 'required'],
             [['status', 'role'], 'string'],
             [['created_at'], 'safe'],
-            [['username', 'password', 'full_name'], 'string', 'max' => 45],
+            [['username', 'password', 'full_name'], 'string', 'max' => 225],
+            [['username','new_']]
         ];
     }
 
@@ -65,4 +72,45 @@ class User extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Post::className(), ['user_id' => 'id']);
     }
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return static::findOne(['access_token' => $token]);
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getAuthKey()
+    {
+        return $this->authKey;
+    }
+
+    public function validateAuthKey($authKey)
+    {
+        return $this->authKey === $authKey;
+    }
+
+    public static function findByUsername($username)
+    {
+        return static::findOne(['username' => $username]);
+    }
+
+    public function validatePassword($password)
+    {
+        if (Yii::$app->security->validatePassword($password, $this->password)) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+
 }
